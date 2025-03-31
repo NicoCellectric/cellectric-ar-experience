@@ -46,11 +46,30 @@
         cursor: pointer;
       }
 
+      .a-enter-vr-button {
+    display: none !important;
+  }
+
+  #markerStatus {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  z-index: 9999; /* Make sure it's above everything */
+  pointer-events: none; /* So it doesn't block clicks */
+}
+
       /* We do NOT include <a-scene> in the DOM initially;
          it’s inside the <template> below. */
     </style>
   </head>
   <body>
+    <!-- THE MARKER -->
+    <div id="markerStatus">🔍 Looking for marker...</div>
     <!-- The popup modal -->
     <div id="popup">
       <div id="popup-content">
@@ -61,6 +80,8 @@
         <button id="proceedBtn">Proceed</button>
         <button id="placeholderBtn">Cancel</button>
       </div>
+
+      
     </div>
 
     <!-- The entire A-Frame scene is held in a <template>,
@@ -162,11 +183,13 @@
         // Marker 6 → Swap Model
         marker6.addEventListener("markerFound", function () {
           console.log("🎯 Marker 6 detected! Queuing explosion model...");
+          markerStatus.innerText = "Model: explode";
           sceneSys.modelToLoad = "assets/BST_FULL_ANIMATED_EXPLODE.glb";
           sceneSys.newModel = true;
         });
 
         marker6.addEventListener("markerLost", function () {
+          markerStatus.innerText = "Model: workflow";
           console.log("❌ Marker 6 lost. Returning to workflow model...");
           sceneSys.modelToLoad = "assets/BST_FULL_ANIMATED_WORKFLOW.glb";
           sceneSys.newModel = true;
