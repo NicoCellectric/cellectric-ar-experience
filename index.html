@@ -59,7 +59,7 @@
           If you have a limited data plan, be aware that loading 3D/AR content can consume more bandwidth.
         </p>
         <button id="proceedBtn">Proceed</button>
-        <button id="placeholderBtn">Load Placeholder</button>
+        <button id="placeholderBtn">Cancel</button>
       </div>
     </div>
 
@@ -200,12 +200,7 @@
       });
 
       placeholderBtn.addEventListener("click", () => {
-        // Hide the popup
-        popup.style.display = "none";
-
-        // Show a static placeholder background; no AR scene is ever loaded
-        document.body.style.background = "url('assets/myPlaceholder.jpg') center center no-repeat";
-        document.body.style.backgroundSize = "cover";
+        window.location.href = "https://cellectric.com"; // Replace with your actual website URL
       });
     </script>
   </body>
