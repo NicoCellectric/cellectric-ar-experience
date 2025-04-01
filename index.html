@@ -89,12 +89,15 @@
     <template id="arSceneTemplate">
       <a-scene
         embedded
-        arjs="sourceType: webcam; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        arjs="sourceType: webcam; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceWidth: 1280; sourceHeight: 720;"
         renderer="precision: high; logarithmicDepthBuffer: true; antialias: true; colorManagement: true"
         material="shader: physical; roughness: 0.2; metalness: 0.8; reflectivity: 1;"
       >
         <!-- Marker 5: Main model -->
-        <a-marker id="marker5" type="barcode" value="5">
+        <a-marker id="marker5" type="barcode" value="5" smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5">
           <a-entity
             id="model"
             gltf-model="assets/BST_FULL_ANIMATED_WORKFLOW.glb"
