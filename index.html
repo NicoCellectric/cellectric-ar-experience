@@ -89,7 +89,7 @@
     <template id="arSceneTemplate">
       <a-scene
         embedded
-        arjs="sourceType: webcam; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceWidth:1280; sourceHeight:720"
+        arjs="sourceType: webcam; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
         renderer="precision: high; logarithmicDepthBuffer: true; antialias: true; colorManagement: true"
         material="shader: physical; roughness: 0.2; metalness: 0.8; reflectivity: 1;"
       >
@@ -228,19 +228,6 @@
       placeholderBtn.addEventListener("click", () => {
         window.location.href = "https://cellectric.com"; // Replace with your actual website URL
       });
-    </script>
-  <!-- Camera Autofocus Tap-->
-    <script>
-      document.addEventListener("click", () => {
-  const video = document.querySelector("video");
-  if (video) {
-    const track = video.srcObject.getVideoTracks()[0];
-    const constraints = {
-      advanced: [{ focusMode: "continuous" }]
-    };
-    track.applyConstraints(constraints).catch(console.warn);
-  }
-});
     </script>
   </body>
 </html>
