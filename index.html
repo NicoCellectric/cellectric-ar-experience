@@ -68,8 +68,6 @@
     </style>
   </head>
   <body>
-    <!-- THE MARKER -->
-    <div id="markerStatus">🔍 Looking for marker...</div>
     <!-- The popup modal -->
     <div id="popup">
       <div id="popup-content">
@@ -88,9 +86,9 @@
     <template id="arSceneTemplate">
       <a-scene
         embedded
-        arjs="sourceType: webcam; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceWidth: 1280; sourceHeight: 720;"
-        renderer="precision: high; logarithmicDepthBuffer: true; antialias: true; colorManagement: true"
-        material="shader: physical; roughness: 0.2; metalness: 0.8; reflectivity: 1;"
+        arjs="sourceType: webcam; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        renderer="precision: medium; logarithmicDepthBuffer: true; antialias: true; colorManagement: false"
+        material="shader: standard; roughness: 0.2; metalness: 0.8; reflectivity: 1;"
       >
         <!-- Marker 5: Main model -->
         <a-marker
@@ -98,7 +96,7 @@
           type="barcode"
           value="5"
           smooth="true"
-          smoothCount="10"
+          smoothCount="2"
           smoothTolerance="0.01"
           smoothThreshold="5"
         >
@@ -111,18 +109,6 @@
             visible="true"
           ></a-entity>
         </a-marker>
-
-        <!-- Marker 6: Triggers model switch -->
-        <a-marker
-          id="marker6"
-          type="barcode"
-          value="6"
-          smooth="true"
-          smoothCount="10"
-          smoothTolerance="0.01"
-          smoothThreshold="5"
-        ></a-marker>
-
         <a-entity camera="near: 0.01; far: 5000;"></a-entity>
       </a-scene>
     </template>
@@ -136,15 +122,6 @@
             let { mixer, clock, newModel, action } =
               this.el.sceneEl.systems["animate-mixer"];
             mixer.update(clock.getDelta());
-            // If a model swap is queued and the animation is near its end, swap
-            if (
-              newModel &&
-              action &&
-              action.time >= action.getClip().duration - 0.1
-            ) {
-              swapModel();
-              this.el.sceneEl.systems["animate-mixer"].newModel = false;
-            }
           }
         },
       });
@@ -156,26 +133,14 @@
           this.mixer = null;
           this.clock = null;
           this.action = null;
-          this.newModel = false;
-          this.modelToLoad = "assets/BST_FULL_ANIMATED_WORKFLOW.glb"; // Default
         },
       });
-
-      // The swapModel function can be global or within a system. We'll define it globally for clarity:
-      function swapModel() {
-        let sceneSys =
-          document.querySelector("a-scene").systems["animate-mixer"];
-        let modelEl = document.querySelector("#model");
-        modelEl.setAttribute("gltf-model", sceneSys.modelToLoad);
-        console.log(`🔄 Swapped to: ${sceneSys.modelToLoad}`);
-      }
     </script>
 
     <script>
       // 2) Called AFTER the scene is injected into the DOM, sets up references & event listeners
       function initARScene() {
         const model = document.querySelector("#model");
-        const marker6 = document.querySelector("#marker6");
         const sceneEl = document.querySelector("a-scene");
         const sceneSys = sceneEl.systems["animate-mixer"];
 
@@ -199,21 +164,6 @@
           } else {
             console.error("❌ No animations found in model.");
           }
-        });
-
-        // Marker 6 → Swap Model
-        marker6.addEventListener("markerFound", function () {
-          console.log("🎯 Marker 6 detected! Queuing explosion model...");
-          markerStatus.innerText = "Model: explode";
-          sceneSys.modelToLoad = "assets/BST_FULL_ANIMATED_EXPLODE.glb";
-          sceneSys.newModel = true;
-        });
-
-        marker6.addEventListener("markerLost", function () {
-          markerStatus.innerText = "Model: workflow";
-          console.log("❌ Marker 6 lost. Returning to workflow model...");
-          sceneSys.modelToLoad = "assets/BST_FULL_ANIMATED_WORKFLOW.glb";
-          sceneSys.newModel = true;
         });
 
         // Attach the animate-mixer component to the model
