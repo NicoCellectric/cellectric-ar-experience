@@ -63,26 +63,6 @@
         pointer-events: none; /* So it doesn't block clicks */
       }
 
-      @media only screen and (orientation: portrait) {
-        body::before {
-          content: "🔄 Please rotate your device to landscape for the best AR experience.";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: rgba(0, 0, 0, 0.5);
-          color: white;
-          font-size: 1.5rem;
-          z-index: 9999;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          padding: 1rem;
-        }
-      }
-
       /* We do NOT include <a-scene> in the DOM initially;
          it’s inside the <template> below. */
     </style>
@@ -215,28 +195,6 @@
 
       placeholderBtn.addEventListener("click", () => {
         window.location.href = "https://cellectric.com"; // Replace with your actual website URL
-      });
-    </script>
-
-    <script>
-      // DEVICE ORIENTATION
-      function correctModelRotation() {
-        const model = document.querySelector("#model");
-        if (!model) return;
-
-        if (window.matchMedia("(orientation: landscape)").matches) {
-          model.setAttribute("rotation", "0 -90 180"); // Landscape fix
-        } else {
-          model.setAttribute("rotation", "0 -90 90"); // Portrait default
-        }
-      }
-
-      window.addEventListener("load", () => {
-        setTimeout(correctModelRotation, 300);
-      });
-
-      window.addEventListener("orientationchange", () => {
-        setTimeout(correctModelRotation, 300); // delay lets browser apply new layout
       });
     </script>
   </body>
